@@ -11,10 +11,8 @@ interface Props {
 
 export default function Header({ showHome, showFeed }: Props) {
    const userId = fetchUser()
-   console.log(userId);
 
    const { user, isLoggedIn } = useContext(AuthContext);
-   console.log(isLoggedIn);
 
 
    return (

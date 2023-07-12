@@ -104,8 +104,8 @@ export const feedQuery = `*[_type == "post"] | order(_createdAt desc) {
   },
 }`;
 
-export const postDetailQuery = (postId: string) => {
-  const query = `*[_type == "post" && _id == '${postId}']{
+export const postDetailQuery = (blogId: any) => {
+  const query = `*[_type == "post" && _id == '${blogId}']{
     image{
       asset->{
         url
@@ -113,7 +113,7 @@ export const postDetailQuery = (postId: string) => {
     },
     _id,
     title,
-    about,
+    description,
     category,
     destination,
     postedBy->{
