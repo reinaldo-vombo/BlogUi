@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { navigate, Link } from 'gatsby'
+import { Link } from 'gatsby'
 import { client, urlFor } from '../../sanityClient';
 import { fetchUser } from '../utils/fetchUser';
 import { v4 as uuid } from 'uuid'
@@ -162,7 +162,7 @@ export default function post({ blog, className }: Props) {
          <Link to={`/user-profile/${user?._id}`} className="flex gap-2 mt-2 items-center">
             <img
                className="w-8 h-8 rounded-full object-cover"
-               src={postedBy?.image.asset.url}
+               src={postedBy?.image?.asset.url}
                alt="user-profile"
             />
             <p className="font-semibold capitalize">{postedBy?.name}</p>

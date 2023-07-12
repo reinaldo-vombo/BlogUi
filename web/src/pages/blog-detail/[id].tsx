@@ -77,6 +77,8 @@ export default function BlogDetails({ location }) {
    const [blogDetais, setBlogDetais] = useState<Blog | null>(null)
    const [comment, setComment] = useState('')
    const [addingComment, setAddingComment] = useState(false)
+   console.log(blogDetais);
+
 
    const fetchBlogDatils = () => {
       let query = postDetailQuery(blogId)
@@ -85,6 +87,8 @@ export default function BlogDetails({ location }) {
          client.fetch(query)
             .then((data: Blog[]) => {
                setBlogDetais(data[0])
+               console.log(data);
+
 
 
                if (data[0]) {
@@ -148,9 +152,33 @@ export default function BlogDetails({ location }) {
                {blogDetais.description}
             </p>
          </div>
-         <Link to={`/user-profile/${blogDetais.postedBy._id}`}>
-            <img src={blogDetais.postedBy.image.asset.url} className="w-10 h-10 rounded-full" alt="user-profile" />
+         <Link to={`/user-profile/${user?._id}`} className="flex gap-2 mt-2 items-center">
+            <img
+               className="w-8 h-8 rounded-full object-cover"
+               src={blogDetais.postedBy?.image?.asset.url}
+               alt="user-profile"
+            />
+            <p className="font-semibold capitalize">{blogDetais.postedBy?.name}</p>
          </Link>
+         <Link to={`/user-profile/${blogDetais.postedBy?._id}`}>
+            <img src={blogDetais.postedBy?.image?.asset.url} className="flex gap-2 mt-5 items-center bg-white rounded-lg " alt="user-profile" />
+         </Link>
+         <h2 className="mt-5 text-2xl">Comments</h2>
+         <div className="max-h-370 overflow-y-auto">
+            {blogDetais?.comments?.map((item) => (
+               <div className="flex gap-2 mt-5 items-center bg-white rounded-lg" key={item.comment}>
+                  <img
+                     src={item.postedBy?.image?.asset.url}
+                     className="w-10 h-10 rounded-full cursor-pointer"
+                     alt="user-profile"
+                  />
+                  <div className="flex flex-col">
+                     <p className="font-bold">{item.postedBy?.name}</p>
+                     <p>{item.comment}</p>
+                  </div>
+               </div>
+            ))}
+         </div>
       </div>
    )
 }

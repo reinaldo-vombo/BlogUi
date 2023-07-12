@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { client } from '../../../sanityClient'
 import { navigate } from 'gatsby';
-import { handleLogin, isLoggedIn, logout } from '../../AuthContext'
 import { AuthContext } from '../../context/sanityContext'
 
 export default function Login() {
@@ -13,7 +12,6 @@ export default function Login() {
    const [password, setPassword] = useState('');
    const [confirmPassword, setConfirmPassword] = useState('');
    const [error, setError] = useState('');
-   const [loggedIn, SetLoggedIn] = useState(isLoggedIn());
 
    const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -30,65 +28,6 @@ export default function Login() {
       }
    };
 
-   // const handleSubmit = async (e: React.FormEvent) => {
-   //    e.preventDefault();
-
-   //    if (password !== confirmPassword) {
-   //       alert('Passwords do not match');
-   //       return;
-   //    }
-
-   //    try {
-   //       //check if user exist
-   //       const existingUser = await client.fetch(`*[_type == "author" && email == $email]`, { email });
-   //       if (existingUser.length > 0) {
-   //          setError('Email already exists');
-   //          return;
-   //       }
-   //       // Save user data to Sanity Author dataset
-   //       await client.create({
-   //          _type: 'author',
-   //          name,
-   //          email,
-   //          password,
-   //       });
-
-   //       // Reset form fields
-   //       setName('');
-   //       setEmail('');
-   //       setPassword('');
-   //       setConfirmPassword('');
-   //       setError('')
-
-   //       alert('User created successfully');
-   //       navigate('/');
-   //    } catch (error) {
-   //       console.error('Error creating user:', error);
-   //       setError('Error creating user');
-   //    }
-   // };
-
-   // const handleFormSubmitt = async (e: React.FormEvent) => {
-   //    e.preventDefault();
-
-   //    const success = await handleLogin({ name, password });
-
-   //    if (success) {
-   //       setName('');
-   //       setPassword('');
-   //       setError('');
-   //       SetLoggedIn(true)
-   //       navigate('/')
-   //    } else {
-   //       setError('Invalid name or password');
-   //    }
-   // };
-
-   const handleLogout = () => {
-      logout(() => {
-         // Handle logout logic (e.g., redirecting to the login page)
-      });
-   };
 
    return (
       <>
