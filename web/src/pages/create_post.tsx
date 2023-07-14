@@ -6,6 +6,7 @@ import { useLocation } from '@reach/router'
 import { client, urlFor } from '../../sanityClient';
 import { categories } from '../utils/data';
 import Spiner from '../components/Spiner';
+import { fetchUser } from '../utils/fetchUser';
 
 interface SanityImageAssetDocument {
    _id: string
@@ -14,22 +15,19 @@ interface SanityImageAssetDocument {
 }
 
 interface User {
-   userId: {
-      _id: string
-      name: string
-      image: {
-         asset: {
-            _ref: string
-         }
+   _id: string
+   name: string
+   image: {
+      asset: {
+         _ref: string
       }
-
    }
 
 }
 
 const CreatePost: React.FC = () => {
    const location = useLocation()
-   const user: User | undefined = location.state as User | undefined
+   const user: User | undefined = fetchUser()
 
 
 
@@ -56,10 +54,10 @@ const CreatePost: React.FC = () => {
                   _ref: imageAsset?._id
                }
             },
-            userId: user?.userId._id,
+            userId: user?._id,
             postedBy: {
                _type: 'postedBy',
-               _ref: user?.userId._id
+               _ref: user?._id
             },
             category
          }
@@ -170,10 +168,10 @@ const CreatePost: React.FC = () => {
                   placeholder="Adicione o seu texto aqui"
                   className="input input-bordered w-full max-w-xs"
                />
-               {user && user.userId && user.userId.image?.asset && (
+               {user && user && user.image?.asset && (
                   <div className='flex gap-2 my-2 items-center'>
-                     <img src={urlFor(user.userId.image).url()} className='w-10 h-10 rounded-full' alt="user photo" />
-                     <p className='font-bold'>{user.userId.name}</p>
+                     <img src={urlFor(user.image).url()} className='w-10 h-10 rounded-full' alt="user photo" />
+                     <p className='font-bold'>{user.name}</p>
                   </div>
                )}
 

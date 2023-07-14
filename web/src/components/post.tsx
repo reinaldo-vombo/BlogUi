@@ -37,6 +37,21 @@ interface Props {
    };
    className: string
 }
+interface UserData {
+   _id: string;
+   name: string;
+   email: string;
+   password: string;
+}
+
+interface User {
+   _id: string;
+   name: string;
+   email: string;
+   password: string;
+   userId: string;
+   userData?: UserData; // Add userData as an optional property of type UserData
+}
 
 export default function post({ blog, className }: Props) {
 
@@ -45,7 +60,8 @@ export default function post({ blog, className }: Props) {
 
 
    const [postHover, setPostHover] = useState(false)
-   const user = fetchUser()
+   const user: User | null = fetchUser();
+
 
    const alreadySaved = !!(blog?.save?.filter((item) => item.postedBy?._id === user?.userId))?.length
 
@@ -64,10 +80,10 @@ export default function post({ blog, className }: Props) {
             .setIfMissing({ save: [] })
             .insert('after', 'save[-1]', [{
                _key: uuid(),
-               userId: user.userId,
+               userId: user?.userId,
                postedBy: {
                   _type: 'postedBy',
-                  _ref: user.userId
+                  _ref: user?.userId
                }
             }])
             .commit()
@@ -139,7 +155,7 @@ export default function post({ blog, className }: Props) {
                               {destination.slice(8, 17)}
                            </a>
                         )}
-                        {postedBy?._id === user.userId && (
+                        {postedBy?._id === user?.userId && (
                            <button
                               type='button'
                               onClick={(e) => {
@@ -159,7 +175,7 @@ export default function post({ blog, className }: Props) {
             </div>
 
          </Link>
-         <Link to={`/user-profile/${user?._id}`} className="flex gap-2 mt-2 items-center">
+         <Link to={`/user-profile/${user?.userData?._id}`} className="flex gap-2 mt-2 items-center">
             <img
                className="w-8 h-8 rounded-full object-cover"
                src={postedBy?.image?.asset.url}

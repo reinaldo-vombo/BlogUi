@@ -45,7 +45,7 @@ export default function Feed({ props }: Props) {
          <Header showHome={false} showFeed={true} />
          <div className='mt-[5rem]'>
             {blogs && (
-               <MasonaryLayout blogs={blogs} />
+               <MasonaryLayout blog={blogs} />
             )}
          </div>
       </>

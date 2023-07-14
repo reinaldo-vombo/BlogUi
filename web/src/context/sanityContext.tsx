@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { v4 as uuid } from 'uuid'
 import { client } from '../../sanityClient';
 import { navigate } from 'gatsby';
 
@@ -25,6 +26,7 @@ interface SanityContextProviderProps {
 
 interface AuthContextProps {
    user: User | null;
+   userId: string | null
    isLoggedIn: boolean;
    createBlogPost: (blogPost: BlogPost, image: File | null) => void;
    signUp: (name: string, email: string, password: string) => void;
@@ -33,6 +35,7 @@ interface AuthContextProps {
 
 const AuthContext = createContext<AuthContextProps>({
    user: null,
+   userId: null,
    isLoggedIn: false,
    signUp: () => { },
    signIn: () => { },
@@ -53,35 +56,13 @@ const SanityContextProvider: React.FC<SanityContextProviderProps> = ({ children 
       }
    }, []);
 
-
-   // const signUp = async (name: string, email: string, password: string) => {
-   //    try {
-   //       // Save user data to Sanity author dataset
-   //       await client.create({
-   //          _type: 'author',
-   //          name,
-   //          email,
-   //          password,
-   //       });
-
-   //       // Update the user state
-   //       setUser({
-   //          name,
-   //          email,
-   //          password,
-   //       });
-
-   //       navigate('/')
-   //    } catch (error) {
-   //       console.error('Sign-up failed:', error);
-   //    }
-   // };
-
    const signUp = async (name: string, email: string, password: string) => {
       try {
          // Save user data to Sanity author dataset
+         const userId = uuid();
          const userData = await client.create({
             _type: 'user',
+            _id: userId,
             name,
             email,
             password,
@@ -89,14 +70,10 @@ const SanityContextProvider: React.FC<SanityContextProviderProps> = ({ children 
 
          // Update the user state
          setUser(userData);
-         setUserId(userData._id);
+         setUserId(userId);
          // Store user data in local storage
          setIsLoggedIn(true);
-         localStorage.setItem('user', JSON.stringify({
-            name,
-            email,
-            password,
-         }));
+         localStorage.setItem('user', JSON.stringify({ userData }));
          navigate('/');
       } catch (error) {
          console.error('Sign-up failed:', error);
@@ -159,7 +136,7 @@ const SanityContextProvider: React.FC<SanityContextProviderProps> = ({ children 
       }
    };
 
-   return <AuthContext.Provider value={{ user, isLoggedIn, signUp, signIn, createBlogPost }}>{children}</AuthContext.Provider>;
+   return <AuthContext.Provider value={{ user, userId, isLoggedIn, signUp, signIn, createBlogPost }}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, SanityContextProvider };
